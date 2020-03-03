@@ -21,7 +21,7 @@ export MAKE = make
 
 SHELL = /bin/sh
 
-TARGETS = protDielectric protEvolver protDihedrals protOligamer protEnergy protFolder protMover protMutator protSequence protInverter protMin protAlign protShaper protBindingEnergy hammingdist
+TARGETS = protDielectric protEvolver protDihedrals protOligamer protEnergy protFolder protMover protMutator protSequence protInverter protMin protAlign protShaper protBindingEnergy hammingdist protGetdistaa
 
 .SUFFIXES: .cc .o .h .a .f
 
@@ -131,6 +131,10 @@ protShaper : libprotcad.a protShaper.cc
 protBindingEnergy : libprotcad.a protBindingEnergy.cc
 	cd $(OBJDIR) && $(CXX) $(CFLAGS) $^ -o $@ $(INC_BASE) $(LIB_BASE)
 	cd $(OBJDIR) && strip $@ && mv $@ $(BINDIR)
+	
+protGetdistaa : libprotcad.a protGetdistaa.cc
+	cd $(OBJDIR) && $(CXX) $(CFLAGS) $^ -o $@ $(INC_BASE) $(LIB_BASE)
+	cd $(OBJDIR) && strip $@ && mv $@ $(BINDIR)
 
 hammingdist : libprotcad.a hammingdist.cc
 	cd $(OBJDIR) && $(CXX) $(CFLAGS) $^ -o $@ $(INC_BASE) $(LIB_BASE)
@@ -145,12 +149,7 @@ $(LIB_F77_OBJECTS): %.o: %.f
 	mv $@ $(OBJDIR)
 
 protcad:
-ifeq ($(UNAME),Linux)
 	cd $(UIDIR) && qmake protcad.pro && make && strip $@ && mv $@ $(BINDIR)
-endif
-ifeq ($(UNAME),Darwin)
-	cd $(UIDIR) && qmake protcad.pro && make && cp $(BINDIR)/protEvolver protcad.app/Contents/MacOS/
-endif
 
 clean: 
 	rm -f $(OBJDIR)/*.o 

@@ -22,7 +22,7 @@ UInt aaSize = sizeof(aminoAcidString)/sizeof(aminoAcidString[0]);
 int main (int argc, char* argv[])
 {
 	//--Program setup
-	if (argc !=2)
+	if (argc !=3)
 	{
 		cout << "Error: Required input file not given, should be run with input file." << endl;
 		cout << "Command: protMutator <inputfile>" << endl;
@@ -102,7 +102,8 @@ int main (int argc, char* argv[])
 		}
 		bundle->protOpt(false);
 		string outFile;
-		outFile = "mut.pdb";
+	//	outFile = "mut.pdb";
+		outFile = argv[2];
 		pdbWriter(bundle, outFile);
 		delete thePDB;
 	return 0;
