@@ -155,7 +155,8 @@ int main (int argc, char* argv[])
 						bundle->initializeSpherePoints(i,j); //initialize the sphere
 						bundle->removeSpherePoints(i,j); //remove any overlapping points in the sphere
 						if (checkthreshold(aminoAcidString[bundle->getTypeFromResNum(i,j)],bundle->tabulateSurfaceArea(i,j))==1){
-							selectaa.push_back(aminoAcidString[bundle->getTypeFromResNum(i,j)]);
+						//	selectaa.push_back(aminoAcidString[bundle->getTypeFromResNum(i,j)]); //uncomment it if using print option 1 (i.e., single run)
+							selectaa.push_back((aminoAcidString[bundle->getTypeFromResNum(i,j)]).append("#"+to_string(dist)));//only use this if using the second option to print (i.e, multiple angs...)
 						//	cout<<aminoAcidString[bundle->getTypeFromResNum(i,j)]<<" "<<bundle->getResNum(i,j)<<endl;
 							break;
 						}
@@ -164,14 +165,51 @@ int main (int argc, char* argv[])
 			}
 		}
 	}
+	//Print options:
+	//1. for single run of specific distance
+	/*
 	int netcharge=0;
-	for (int d=0;d<selectaa.size();d++){
-		map<string,double>::iterator itr1;
-    	for (itr1=chargeaa.begin();itr1!=chargeaa.end();itr1++){
-			if (selectaa[d]==itr1->first){
-				netcharge+=itr1->second;
-			}
-  	  }
+	if (selectaa.size()>5){
+		for (int d=0;d<selectaa.size();d++){
+			map<string,double>::iterator itr1;
+    		for (itr1=chargeaa.begin();itr1!=chargeaa.end();itr1++){
+				if (selectaa[d]==itr1->first){
+					netcharge+=itr1->second;
+				}
+  	  		}
+		}
+		cout<<argv[1]<<" "<<mindistance<<"-"<<maxdistance<<" Total number of residues: "<<selectaa.size()<<" net charge: "<<netcharge<<" and average charge: "<<(netcharge/double(selectaa.size()))<<endl;
+	}else{
+		cout<<argv[1]<<" number of residues less than the specified threshold"<<endl;
 	}
-	cout<<argv[1]<<" "<<mindistance<<"-"<<maxdistance<<" Total number of residues: "<<selectaa.size()<<" net charge: "<<netcharge<<" and average charge: "<<(netcharge/double(selectaa.size()))<<endl;
+	*/
+	//2. for multiple angstrom use this
+	for (int e=mindistance;e<maxdistance;e++){
+		for (int f=1;f<=(maxdistance-mindistance);f++){
+			int aacount=0;
+			int netcharge=0;
+			if ((e+f)<=maxdistance){
+				for (int d=0;d<selectaa.size();d++){
+					string tdist=selectaa[d].substr(selectaa[d].find('#')+1);
+					string tempaa=selectaa[d].substr(0,selectaa[d].find('#'));
+					if (stod(tdist)>=e && stod(tdist)<(e+f)){
+						map<string,double>::iterator itr1;
+    					for (itr1=chargeaa.begin();itr1!=chargeaa.end();itr1++){
+							if (tempaa==itr1->first){
+								netcharge+=itr1->second;
+								aacount+=1;
+							}
+  	 	 				}
+					}
+				}
+				if (aacount>5){
+					cout<<argv[1]<<" "<<e<<"-"<<e+f<<" Total number of residues: "<<selectaa.size()<<" net charge: "<<netcharge<<" and average charge: "<<(netcharge/double(aacount))<<endl;
+				}else{
+					cout<<argv[1]<<" "<<e<<"-"<<e+f<<" Total number of residues: "<<selectaa.size()<<" net charge: "<<" and average charge: "<<endl;
+				}
+			}
+		}
+	}
+
+
 }
