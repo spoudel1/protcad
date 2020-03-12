@@ -4566,7 +4566,6 @@ double residue::tabulateSurfaceArea()
 	{
 		surfaceArea += itsAtoms[i]->calculateExposedSASA();
 	}
-
 	return surfaceArea;
 }
 

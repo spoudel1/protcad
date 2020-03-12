@@ -601,7 +601,6 @@ double atom::calculateExposedSASA()
 {
     UInt totalNumberOfPoints = spherePoint::getSphereSize();
     UInt numberOfExistingPoints = countTrueSpherePoints();
-
     if (totalNumberOfPoints == 0)
     {
         cout << "ERROR in calculateExposedSASA ... division by zero!" << endl;
@@ -611,7 +610,6 @@ double atom::calculateExposedSASA()
     //cout << numberOfExistingPoints << " " << totalNumberOfPoints << " ";
     double ratioExposed = (double)numberOfExistingPoints / (double)totalNumberOfPoints;
     double exposedSASA = ratioExposed * this->calculateTotalSASA();
-
     return exposedSASA;
 }
 
