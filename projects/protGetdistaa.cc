@@ -156,8 +156,11 @@ int main (int argc, char* argv[])
 						bundle->removeSpherePoints(i,j); //remove any overlapping points in the sphere
 						if (checkthreshold(aminoAcidString[bundle->getTypeFromResNum(i,j)],bundle->tabulateSurfaceArea(i,j))==1){
 						//	selectaa.push_back(aminoAcidString[bundle->getTypeFromResNum(i,j)]); //uncomment it if using print option 1 (i.e., single run)
-							selectaa.push_back((aminoAcidString[bundle->getTypeFromResNum(i,j)]).append("#"+to_string(dist)));//only use this if using the second option to print (i.e, multiple angs...)
-						//	cout<<aminoAcidString[bundle->getTypeFromResNum(i,j)]<<" "<<bundle->getResNum(i,j)<<endl;
+						//	cout<<aminoAcidString[bundle->getTypeFromResNum(i,j)]<<" "<<bundle->getResNum(i,j)<<" "<<dist<<endl;
+						//	string tpair=(aminoAcidString[bundle->getTypeFromResNum(i,j)])+"#"+to_string(dist);
+						//	cout<<tpair<<endl;
+							selectaa.push_back((aminoAcidString[bundle->getTypeFromResNum(i,j)])+"#"+to_string(dist));//only use this if using the second option to print (i.e, multiple angs...)
+					//		cout<<(aminoAcidString[bundle->getTypeFromResNum(i,j)])+"#"+to_string(dist)<<" "<<bundle->getResNum(i,j)<<endl;
 							break;
 						}
 					}
@@ -192,7 +195,7 @@ int main (int argc, char* argv[])
 				for (int d=0;d<selectaa.size();d++){
 					string tdist=selectaa[d].substr(selectaa[d].find('#')+1);
 					string tempaa=selectaa[d].substr(0,selectaa[d].find('#'));
-					if (stod(tdist)>=e && stod(tdist)<(e+f)){
+					if (stod(tdist)>=e && stod(tdist)<=(e+f)){
 						map<string,double>::iterator itr1;
     					for (itr1=chargeaa.begin();itr1!=chargeaa.end();itr1++){
 							if (tempaa==itr1->first){
@@ -203,9 +206,9 @@ int main (int argc, char* argv[])
 					}
 				}
 				if (aacount>5){
-					cout<<argv[1]<<" "<<e<<"-"<<e+f<<" Total number of residues: "<<selectaa.size()<<" net charge: "<<netcharge<<" and average charge: "<<(netcharge/double(aacount))<<endl;
+					cout<<argv[1]<<" "<<e<<"-"<<e+f<<" Total number of residues: "<<aacount<<" net charge: "<<netcharge<<" and average charge: "<<(netcharge/double(aacount))<<endl;
 				}else{
-					cout<<argv[1]<<" "<<e<<"-"<<e+f<<" Total number of residues: "<<selectaa.size()<<" net charge: "<<" and average charge: "<<endl;
+					cout<<argv[1]<<" "<<e<<"-"<<e+f<<" Total number of residues: "<<aacount<<" net charge: "<<" and average charge: "<<endl;
 				}
 			}
 		}
