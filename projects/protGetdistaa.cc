@@ -114,6 +114,8 @@ int main (int argc, char* argv[])
 	ensemble* theEnsemble = thePDB->getEnsemblePointer();
 	molecule* pMol = theEnsemble->getMoleculePointer(0);
 	protein* bundle = static_cast<protein*>(pMol);
+	atomIterator theIter1(bundle);
+	atom* pAtom;
 
 	bundle->updateDielectrics();
 	dblVec central_coords, CA_coords;
@@ -147,27 +149,35 @@ int main (int argc, char* argv[])
 	//		checkthreshold(aminoAcidString[bundle->getTypeFromResNum(i,j)],bundle->tabulateSurfaceArea(i,j));
 			if (!bundle->isNotAminoAcid(i,j)){
 				UInt atomNum = bundle->getNumAtoms(i,j);
-				for (UInt k = 0; k < atomNum; k ++)
+				double fdist=CMath::distance(central_coords, bundle->getCoords(i, j, 0)); //distance from the central atom
+				UInt final_i=i;
+				UInt final_j=j;
+				for (UInt k = 1; k < atomNum; k ++)
 				{
 					CA_coords = bundle->getCoords(i, j, k);
 					double dist = CMath::distance(central_coords, CA_coords);
-					if (dist<maxdistance && dist >mindistance){
-						bundle->initializeSpherePoints(i,j); //initialize the sphere
-						bundle->removeSpherePoints(i,j); //remove any overlapping points in the sphere
-						if (checkthreshold(aminoAcidString[bundle->getTypeFromResNum(i,j)],bundle->tabulateSurfaceArea(i,j))==1){
+					if (dist<=maxdistance && dist >=mindistance && dist<fdist){
+						fdist=dist;
+						final_i=i;
+						final_j=j;
+					}
+				}
+				if (fdist<=maxdistance && fdist >=mindistance){
+					bundle->initializeSpherePoints(final_i,final_j); //initialize the sphere
+					bundle->removeSpherePoints(final_i,final_j); //remove any overlapping points in the sphere
+					if (checkthreshold(aminoAcidString[bundle->getTypeFromResNum(final_i,final_j)],bundle->tabulateSurfaceArea(final_i,final_j))==1){
 						//	selectaa.push_back(aminoAcidString[bundle->getTypeFromResNum(i,j)]); //uncomment it if using print option 1 (i.e., single run)
 						//	cout<<aminoAcidString[bundle->getTypeFromResNum(i,j)]<<" "<<bundle->getResNum(i,j)<<" "<<dist<<endl;
 						//	string tpair=(aminoAcidString[bundle->getTypeFromResNum(i,j)])+"#"+to_string(dist);
 						//	cout<<tpair<<endl;
-							selectaa.push_back((aminoAcidString[bundle->getTypeFromResNum(i,j)])+"#"+to_string(dist));//only use this if using the second option to print (i.e, multiple angs...)
-					//		cout<<(aminoAcidString[bundle->getTypeFromResNum(i,j)])+"#"+to_string(dist)<<" "<<bundle->getResNum(i,j)<<endl;
-							break;
-						}
+						selectaa.push_back((aminoAcidString[bundle->getTypeFromResNum(final_i,final_j)])+"#"+to_string(fdist));//only use this if using the second option to print (i.e, multiple angs...)
+					//	cout<<(aminoAcidString[bundle->getTypeFromResNum(final_i,final_j)])+"#"+to_string(fdist)<<" "<<bundle->getResNum(final_i,final_j)<<endl;
 					}
 				}
 			}
 		}
 	}
+	
 	//Print options:
 	//1. for single run of specific distance
 	/*
@@ -183,7 +193,7 @@ int main (int argc, char* argv[])
 		}
 		cout<<argv[1]<<" "<<mindistance<<"-"<<maxdistance<<" Total number of residues: "<<selectaa.size()<<" net charge: "<<netcharge<<" and average charge: "<<(netcharge/double(selectaa.size()))<<endl;
 	}else{
-		cout<<argv[1]<<" number of residues less than the specified threshold"<<endl;
+		cout<<argv[1]<<" number of residues less than the specified threshold (i.e., 5 residues minimum)"<<endl;
 	}
 	*/
 	//2. for multiple angstrom use this
