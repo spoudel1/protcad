@@ -90,7 +90,7 @@ int checkthreshold(string aa, double sufarea){
 	map<string,double>::iterator itr;
 	int present=0;
     for (itr=maxsolv.begin();itr!=maxsolv.end();itr++){
-		if (aa==itr->first && sufarea>(0.1*itr->second)){
+		if (aa==itr->first && sufarea>(0.05*itr->second)){
 			present=1;
 			break;
 		}
@@ -156,7 +156,7 @@ int main (int argc, char* argv[])
 				{
 					CA_coords = bundle->getCoords(i, j, k);
 					double dist = CMath::distance(central_coords, CA_coords);
-					if (dist<=maxdistance && dist >=mindistance && dist<fdist){
+					if (dist<fdist){
 						fdist=dist;
 						final_i=i;
 						final_j=j;
@@ -166,12 +166,12 @@ int main (int argc, char* argv[])
 					bundle->initializeSpherePoints(final_i,final_j); //initialize the sphere
 					bundle->removeSpherePoints(final_i,final_j); //remove any overlapping points in the sphere
 					if (checkthreshold(aminoAcidString[bundle->getTypeFromResNum(final_i,final_j)],bundle->tabulateSurfaceArea(final_i,final_j))==1){
-						//	selectaa.push_back(aminoAcidString[bundle->getTypeFromResNum(i,j)]); //uncomment it if using print option 1 (i.e., single run)
-						//	cout<<aminoAcidString[bundle->getTypeFromResNum(i,j)]<<" "<<bundle->getResNum(i,j)<<" "<<dist<<endl;
+						selectaa.push_back(aminoAcidString[bundle->getTypeFromResNum(i,j)]); //uncomment it if using print option 1 (i.e., single run)
+						cout<<aminoAcidString[bundle->getTypeFromResNum(i,j)]<<" "<<bundle->getResNum(i,j)<<" "<<fdist<<endl;
 						//	string tpair=(aminoAcidString[bundle->getTypeFromResNum(i,j)])+"#"+to_string(dist);
 						//	cout<<tpair<<endl;
-						selectaa.push_back((aminoAcidString[bundle->getTypeFromResNum(final_i,final_j)])+"#"+to_string(fdist));//only use this if using the second option to print (i.e, multiple angs...)
-					//	cout<<(aminoAcidString[bundle->getTypeFromResNum(final_i,final_j)])+"#"+to_string(fdist)<<" "<<bundle->getResNum(final_i,final_j)<<endl;
+	//					selectaa.push_back((aminoAcidString[bundle->getTypeFromResNum(final_i,final_j)])+"#"+to_string(fdist));//only use this if using the second option to print (i.e, multiple angs...)
+	//					cout<<(aminoAcidString[bundle->getTypeFromResNum(final_i,final_j)])+"#"+to_string(fdist)<<" "<<bundle->getResNum(final_i,final_j)<<endl;
 					}
 				}
 			}
@@ -180,9 +180,9 @@ int main (int argc, char* argv[])
 	
 	//Print options:
 	//1. for single run of specific distance
-	/*
+	
 	int netcharge=0;
-	if (selectaa.size()>5){
+	if (selectaa.size()>=5){
 		for (int d=0;d<selectaa.size();d++){
 			map<string,double>::iterator itr1;
     		for (itr1=chargeaa.begin();itr1!=chargeaa.end();itr1++){
@@ -195,7 +195,7 @@ int main (int argc, char* argv[])
 	}else{
 		cout<<argv[1]<<" number of residues less than the specified threshold (i.e., 5 residues minimum)"<<endl;
 	}
-	*/
+	/*
 	//2. for multiple angstrom use this
 	for (int e=mindistance;e<maxdistance;e++){
 		for (int f=1;f<=(maxdistance-mindistance);f++){
@@ -215,14 +215,14 @@ int main (int argc, char* argv[])
   	 	 				}
 					}
 				}
-				if (aacount>5){
+				if (aacount>=5){
 					cout<<argv[1]<<" "<<e<<"-"<<e+f<<" Total number of residues: "<<aacount<<" net charge: "<<netcharge<<" and average charge: "<<(netcharge/double(aacount))<<endl;
 				}else{
-					cout<<argv[1]<<" "<<e<<"-"<<e+f<<" Total number of residues: "<<aacount<<" net charge: "<<" and average charge: "<<endl;
+					cout<<argv[1]<<" "<<e<<"-"<<e+f<<" Total number of residues: "<<aacount<<" net charge: "<<"NA"<<" and average charge: "<<"NA"<<endl;
 				}
 			}
 		}
-	}
+	}*/
 
 
 }
