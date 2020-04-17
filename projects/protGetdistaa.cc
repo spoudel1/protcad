@@ -18,6 +18,7 @@ string aminoAcidString[] = {"A","R","N","D","D","C","C","C","Q","E","E","H","H",
 //--Program setup-------------------------------------------------------------
 //Below is the maximum accessible surface area (ASA) of all 20 types of amino acid residues (likely doesn't include the water radius - need to check this though) calculated using tabulateSurfaceArea
 map<string,double>maxsolv={{"A",94.10},{"C",112.74},{"D",133.59},{"E",157.47},{"F",185.48},{"G",94.73},{"H",176.27},{"I",137.03},{"K",178.33},{"L",151.53},{"M",150.08},{"N",137.53},{"P",117.59},{"Q",150.54},{"R",207.13},{"S",106.33},{"T",119.83},{"V",124.97},{"W",212.63},{"Y",216.55}};
+//standard charges of all amino acids
 map<string,double>chargeaa={{"A",0.00},{"C",0.00},{"D",-1.00},{"E",-1.00},{"F",0.00},{"G",0.00},{"H",0.00},{"I",0.00},{"K",1.00},{"L",0.00},{"M",0.00},{"N",0.00},{"P",0.00},{"Q",0.00},{"R",1.00},{"S",0.00},{"T",0.00},{"V",0.00},{"W",0.00},{"Y",0.00}};
 //get median dielectric of all the residues
 double getmedianDielectric(protein* &_prot)
