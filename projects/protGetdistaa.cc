@@ -148,7 +148,7 @@ int main (int argc, char* argv[])
 	//		bundle->removeSpherePoints(i,j);
 	//		cout<<aminoAcidString[bundle->getTypeFromResNum(i,j)]<<" "<<bundle->tabulateSurfaceArea(i,j)<<" exposed surface"<<endl;
 	//		checkthreshold(aminoAcidString[bundle->getTypeFromResNum(i,j)],bundle->tabulateSurfaceArea(i,j));
-			if (!bundle->isNotAminoAcid(i,j)){
+			if (!bundle->isCofactor(i,j)){
 				UInt atomNum = bundle->getNumAtoms(i,j);
 				double fdist=CMath::distance(central_coords, bundle->getCoords(i, j, 0)); //distance from the central atom
 				UInt final_i=i;
